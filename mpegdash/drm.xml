@@ -1,0 +1,10 @@
+<GPACDRM type="CENC AES-CTR">
+  <DRMInfo type="pssh" version="1">
+    <BS ID128="1077efecc0b24d02ace33c1e52e2fb4b"/>
+    <BS bits="32" value="1"/>
+    <BS ID128="cd7eb9ff88f34caeb06185b00024e4c2"/>
+  </DRMInfo>
+  <CrypTrack IV_size="8" first_IV="0x603f39bfdb3d9799" isEncrypted="1" saiSavedBox="senc" trackID="1">
+    <key KID="0xcd7eb9ff88f34caeb06185b00024e4c2" value="0x63cb5f7184dd4b689a5c5ff11ee6a328"/>
+  </CrypTrack>
+</GPACDRM>
