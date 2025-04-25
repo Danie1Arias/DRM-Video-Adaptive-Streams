@@ -1,66 +1,66 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <!-- Choose one of the two options: -->
-    	<!-- Shaka Player compiled library: -->
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="https://assets.nflxext.com/ffe/siteui/common/icons/nficon2016.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Página de Inicio - Netflix</title>
+
     	<script src="https://cdn.jsdelivr.net/npm/shaka-player@4.12.4/dist/shaka-player.compiled.min.js"></script>
-        <!-- Shaka Player compiled library: -->
-        <!-- <script src="https://cdn.jsdelivr.net/npm/shaka-player@4.12.4/dist/shaka-player.compiled.min.js"></script>	-->
-    	<!-- Your application source: -->
-    	<script>
-    		var manifestUri = './output.mpd';
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+		<link rel="stylesheet" href="styles.css">
 
-    		function initApp() {
-    			// Install built-in polyfills to patch browser incompatibilities.
-    			shaka.polyfill.installAll();
+		<script>
+			function initApp() {
+				shaka.polyfill.installAll();
 
-    			// Check to see if the browser supports the basic APIs Shaka needs.
-    			if (shaka.Player.isBrowserSupported()) {
-    				// Everything looks good!
-    				initPlayer();
-    			} else {
-    				// This browser does not have the minimum set of APIs we need.
-    				console.error('Browser not supported!');
-    			}
-    		}
+				if (shaka.Player.isBrowserSupported()) {
+					initPlayer('output_elephants');  // carga por defecto
+				} else {
+					console.error('Browser not supported!');
+				}
 
-    		function initPlayer() {
-    			// Create a Player instance.
-    			var video = document.getElementById('video');
-    			var player = new shaka.Player(video);
-    			
-    			player.configure({
-    				drm:{
-    					clearKeys:{
-    						'cd7eb9ff88f34caeb06185b00024e4c2': '63cb5f7184dd4b689a5c5ff11ee6a328'
-    					}
-    				},
-    				abr: {
-    					enabled: false
-    				}
-    			});
+				document.getElementById('videoSelector').addEventListener('change', (e) => {
+					let selected = e.target.value;
+					initPlayer(selected);
+				});
+			}
 
-    			// Attach player to the window to make it easy to access in the JS console.
-    			window.player = player;
+			function initPlayer(videoKey) {
+				const manifestMap = {
+					output_elephants: './output_elephants.mpd',
+					output_popeye: './output_popeye.mpd',
+					output_pokemon: './output_pokemon.mpd'
+				};
 
-    			// Listen for error events.
-    			player.addEventListener('error', onErrorEvent);
+				const manifestUri = manifestMap[videoKey];
 
-    			// Try to load a manifest.
-    			// This is an asynchronous process.
-    			player.load(manifestUri).then(function() {
-    				// This runs if the asynchronous load is successful.
-    				console.log('The video has now been loaded!');
-    				initSelector(player);
-    			}).catch(onError);  // onError is executed if the asynchronous load fails.
-    			
-    			console.log(player.getConfiguration())
-    		}
-    		
+				var video = document.getElementById('video');
+				var player = new shaka.Player(video);
+				player.configure({
+							drm: {
+								clearKeys: {
+								'cd7eb9ff88f34caeb06185b00024e4c2': '63cb5f7184dd4b689a5c5ff11ee6a328'
+								}	
+							},
+							abr: {
+								enabled: false
+							}
+						});		
+
+				window.player = player;
+
+				player.addEventListener('error', onErrorEvent);
+
+				player.load(manifestUri).then(function () {
+					console.log('The video has now been loaded!');
+					initSelector(player);
+				}).catch(onError);
+			}
+
     		function initSelector(player) {
     			var select = document.querySelector('.variantSelector');
     			options = player.getVariantTracks().map(variant => "<option>" + (variant['videoBandwidth'] / 1024) + "</option>").join('\n');
-    			console.log(options)
 
     			select.innerHTML = options;
     			select.addEventListener('change', (event) => {
@@ -82,14 +82,52 @@
     	</script>
   </head>
   <body>
-    	<div>
-    		<label> Select the bitrate: </label>
-    		<select class='variantSelector' name="variantSelector"></select>
-    		<label> Kb </label>
-    	</div>
-    	<video id="video"
-    		   height="720"
-    		   width="1280"
-    		   controls autoplay></video>
+	<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img src="Logonetflix.png" alt="Logo" width="100" class="d-inline-block align-text-top"/>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#"><b>Inicio</b></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Series</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Películas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Novedades más vistas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="https://localhost:4443/indexTest.html">Mi lista</a>
+            </li>
+        </ul>
+        <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Títulos, personas, géneros" aria-label="Search" />
+            <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
+        </div>
+    </div>
+    </nav>
+
+	<div class="container">
+		<div class="d-flex justify-content-center mt-4">
+			<video id="video" height="720" width="1280" controls autoplay></video>
+		</div>
+	
+		<div class="form-floating mt-4">
+			<select class="form-select variantSelector" aria-label="Select the bitrate" name="variantSelector" style="background-color: #212529;"></select>
+			<label for="floatingSelect" style="color: rgba(255, 255, 255, 0.65)">Select the bitrate</label>
+		</div>
+	</div>
+	  
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js" integrity="sha384-VQqxDN0EQCkWoxt/0vsQvZswzTHUVOImccYmSyhJTp7kGtPed0Qcx8rK9h9YEgx+" crossorigin="anonymous"></script>		
   </body>
 </html>

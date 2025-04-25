@@ -1,0 +1,19 @@
+.navbar {
+    background-color: rgb(20, 20, 20) !important;
+    a, a:hover, b {
+        color: white;
+    }
+  }
+
+body, .form-select {
+    background-color: #212529;
+    color: white;
+}
+
+video {
+    border-radius: 8px;
+}
+
+.navbar-nav .nav-link.active {
+    color: white;
+}

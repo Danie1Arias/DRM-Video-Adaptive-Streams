@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-    	<!-- Shaka Player compiled library: -->
+    	<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="https://assets.nflxext.com/ffe/siteui/common/icons/nficon2016.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Mi Lista - Netflix</title>
     	<script src="https://cdn.jsdelivr.net/npm/shaka-player@4.12.4/dist/shaka-player.compiled.min.js"></script>
-    	<!-- Your application source: -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+		<link rel="stylesheet" href="styles.css">
+		
     	<script>
     		var player;
 
@@ -51,6 +56,7 @@
     		function loadVideo(player, manifest, kid, key) {
     			player.configure("drm.clearKeys." + kid, key)
     			player.configure('abr.enabled', false)
+				document.querySelector('.variantSelector').setAttribute('disabled', false)
     		
     			// Try to load a manifest.
     			// This is an asynchronous process.
@@ -58,6 +64,7 @@
     				// This runs if the asynchronous load is successful.
     				console.log('The video has now been loaded!');
     				initSelector(player);
+					document.querySelector('.variantSelector').removeAttribute('disabled')
     			}).catch(onError);  // onError is executed if the asynchronous load fails.
     			
     			console.log(player.getConfiguration())
@@ -67,7 +74,7 @@
     			var select = document.querySelector('.variantSelector');
     			options = player.getVariantTracks().map(variant => "<option>" + (variant['videoBandwidth'] / 1024) + "</option>").join('\n');
     			console.log(options)
-
+			
     			select.innerHTML = options;
     			select.addEventListener('change', (event) => {
     				player.selectVariantTrack(player.getVariantTracks()[event.target.selectedIndex], true, 3)
@@ -88,23 +95,68 @@
     	</script>
   </head>
   <body>
-    	<div>
-    		<label> Manifest: </label>
-    		<input type="text" id="manifest" name="manifest">
-    		<label> KID: </label>
-    		<input type="text" id="kid" name="kid">
-    		<label> KEY: </label>
-    		<input type="text" id="key" name="key">
-    		<button type="button" id="loadButton" name="loadButton">Load</button>
-    	</div>
-    	<div>
-    		<label> Select the bitrate: </label>
-    		<select class='variantSelector' name="variantSelector"></select>
-    		<label> Kb </label>
-    	</div>
-    	<video id="video"
-    		   height="720"
-    		   width="1280"
-    		   controls autoplay></video>
+	<nav class="navbar navbar-expand-lg">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">
+			  <img src="Logonetflix.png" alt="Logo" width="100" class="d-inline-block align-text-top"/>
+			</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+				<li class="nav-item">
+					<a class="nav-link active" aria-current="page" href="https://localhost:4443/index.html">Inicio</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Series</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Películas</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Novedades más vistas</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#"><b>Mi lista</b></a>
+				</li>
+			</ul>
+			<form class="d-flex" role="search">
+				<input class="form-control me-2" type="search" placeholder="Títulos, personas, géneros" aria-label="Search" />
+				<button class="btn btn-outline-success" type="submit">Buscar</button>
+			</form>
+			</div>
+		</div>
+		</nav>
+
+
+		<div class="container">
+
+			<div class="row mt-3">
+				<div class="col">
+				  <input type="text" class="form-control" placeholder="Manifest" aria-label="Manifest" id="manifest" name="manifest">
+				</div>
+				<div class="col">
+				  <input type="text" class="form-control" placeholder="KID" aria-label="KID" id="kid" name="kid">
+				</div>
+				<div class="col">
+					<input type="text" class="form-control" placeholder="KEY" aria-label="KEY" id="key" name="key">
+				</div>
+				<div class="col-auto">
+					<button type="submit" class="btn btn-primary mb-3" id="loadButton" name="loadButton">Load</button>
+				</div>
+			  </div>
+
+
+			<div class="d-flex justify-content-center mt-3">
+				<video id="video" height="720" width="1280" controls autoplay></video>
+			</div>
+		
+			<div class="form-floating mt-4 mb-4">
+				<select class="form-select variantSelector" aria-label="Select the bitrate" name="variantSelector" style="background-color: #212529;" disabled></select>
+				<label for="floatingSelect" style="color: rgba(255, 255, 255, 0.65)">Select the bitrate</label>
+			</div>
+		</div>
+
   </body>
 </html>
