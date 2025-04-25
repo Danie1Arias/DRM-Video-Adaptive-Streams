@@ -1,6 +1,6 @@
 # MPEG-DASH server and video player
 
-In this example we set up a basic HTTPS servar that serves an adaptive and DRM-protected video streaming using MPEG-DASH and common encryption (CENC). Additionally, the basic player relies on W3C standards Encrypted Media Extensions and Google's Shaka Player.
+In this example we set up a basic HTTPS server that serves an adaptive and DRM-protected video streaming using MPEG-DASH and common encryption (CENC). Additionally, the basic player relies on W3C standards Encrypted Media Extensions and Google's Shaka Player.
 
 ## Instructions
 
